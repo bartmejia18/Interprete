@@ -1,0 +1,2 @@
+DEFINIR variable1 COMO ENTERO;
+DEFINIR variable2 COMO ENTERO;
