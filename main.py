@@ -1,17 +1,40 @@
 import re
-regexDefinir = "DEFINIR ([a-z][a-z0-9A-Z_]*) COMO (ENTERO|REAL|LOGICO|TEXTO);"
-regexSet = '([a-z][a-zA-Z0-9_]*)<-([0-9.]+|".*"|Falso|Verdadero|([a-zA-Z0-9_.]*\s?(\+|\*|\-|\/)\s?[a-zA-Z0-9_.]+)|[a-zA-Z]*);'
+import regex.regex as rg
+
+diccionarioVariables = {}
+
+def validarVariable(valor):
+    if re.match(rg.regexString, valor):
+        return "TEXTO"
+    if re.match(rg.regexFloat, valor):
+        return "REAL"
+    if re.match(rg.regexInt, valor):
+        return "ENTERO"
+    if re.match(rg.regexBoolean, valor):
+        return "LOGICO"
+
+def existeVariable(nombre, valor):
+    if nombre in diccionarioVariables:
+        if (diccionarioVariables[nombre] == validarVariable(valor)):
+            return True
+        else:
+            return False
+    else: 
+        print('Error: Variable desconocida')
+        return False
 
 def main():
     nombreArchivo = "prueba1"
     archivo = open(nombreArchivo+".X", "r")
     archivoSalida = open(nombreArchivo+".py", "w")
+
     for linea in archivo.readlines():
-        if(bool(re.search(regexDefinir, linea)) == True):
-            codigo = re.findall(regexDefinir, linea)
+        if(bool(re.search(rg.regexDefinir, linea)) == True):
+            codigo = re.findall(rg.regexDefinir, linea)
             codigo = codigo[0]
             nombreVariable = codigo[0]
             tipoVariable = codigo[1]
+            diccionarioVariables[nombreVariable] = tipoVariable
             if(tipoVariable == "ENTERO"):
                 valorVariable = "0"
             elif(tipoVariable == "TEXTO"):
@@ -20,19 +43,24 @@ def main():
                 valorVariable = "False"
             elif(tipoVariable == "REAL"):
                 valorVariable = "0.0"
-            else:
-                print("Error, el tipo de dato no se reconoce.")
-            archivoSalida.writelines(nombreVariable + " = " + valorVariable + '\n')
-            print(linea + " -> " + nombreVariable + " = " + valorVariable)
-        elif((bool(re.search(regexSet, linea)) == True)):
-            codigo = re.findall(regexSet, linea)
+            archivoSalida.writelines(nombreVariable + " = " + valorVariable + '\n')      
+        # else:
+        #     print("Error, el tipo de dato no se reconoce.")
+        #     break;
+
+        if((bool(re.search(rg.regexSet, linea)) == True)):
+            codigo = re.findall(rg.regexSet, linea)
             codigo = codigo[0]
             nombreVariable = codigo[0]
             valorVariable = codigo[1]
-            if(valorVariable == "Verdadero"):
-                valorVariable = "True"
-            elif(valorVariable == "Falso"):
-                valorVariable = "False"
-            archivoSalida.writelines(nombreVariable + " = " + valorVariable + '\n')
-            print(linea + " -> " + nombreVariable + " = " + valorVariable)
+            if (existeVariable(nombreVariable, valorVariable)):
+                if(valorVariable == "Verdadero"):
+                    valorVariable = "True"
+                elif(valorVariable == "Falso"):
+                    valorVariable = "False"
+                archivoSalida.writelines(nombreVariable + " = " + valorVariable + '\n')
+            else:
+                print("Error: Asignacion incorrecta")
+                break;
+            
 main()
