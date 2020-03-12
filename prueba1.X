@@ -1,12 +1,6 @@
-DEFINIR variable1 COMO TEXTO;
-DEFINIR variable2 COMO ENTERO;
-DEFINIR variable3 COMO REAL;
-DEFINIR variable4 COMO LOGICO;
-variable1<-"3";
-variable2<-4;
-variable3<-2.5;
-variable4<-True;
-variable1<-hola + hola
-variable2<-sqrt 2
-variable2<-cube prueba
-variable3<-3.5
+DEFINIR num1 COMO ENTERO;
+num1<-10;
+DEFINIR num2 COMO ENTERO;
+ESCRIBIR "Ingrese un numero: ";
+LEER num2;
+num2<-num1 + num2;
