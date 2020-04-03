@@ -1,5 +1,9 @@
 import re
 
+#Definir Inicio y Final
+regexInicio = "PROCESO ([a-z][a-zA-Z0-9]*)"
+regexFin = "FINPROCESO"
+
 #Definir variables
 regexDefinir = "DEFINIR ([a-z][a-z0-9A-Z_]*) COMO (ENTERO|REAL|LOGICO|TEXTO);"
 
@@ -25,4 +29,4 @@ regexLeer = 'LEER ([a-zA-Z0-9_.]+);'
 regexEscribir = 'ESCRIBIR (".*");'
 
 #Sentencia ESCRIBIR_LINEA
-regexEscribirLinea = re.compile(r'(ESCRIBIR_LINEA\s)((".*")|[a-zA-Z][a-zA-Z0-9_.]*);')
+regexEscribirLinea = re.compile(r'ESCRIBIR_LINEA\s(".*")(\s?\+\s?([a-zA-Z][a-zA-Z0-9_.]*))?;')

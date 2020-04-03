@@ -17,12 +17,15 @@ def tipoValor(valor):
     if re.match(rg.regexBoolean, valor):
         return "LOGICO"
 
+def escribirArchivo(linea):
+    archivoSalida.writelines(linea)
+
 def asignacionOperacion(codigo):
     codigo = codigo[0]
     nombreVariable = codigo[0]
     valorVariable = codigo[1]
     if nombreVariable in diccionarioVariables:
-        archivoSalida.writelines(nombreVariable + " = " + valorVariable + '\n')
+        escribirArchivo(nombreVariable + " = " + valorVariable + '\n')
 
 def asignacionValor(codigo):
     codigo = codigo[0]
@@ -34,7 +37,7 @@ def asignacionValor(codigo):
                 valorVariable = "True"
             elif(valorVariable == "Falso"):
                 valorVariable = "False"
-            archivoSalida.writelines(nombreVariable + " = " + valorVariable + '\n')
+            escribirArchivo(nombreVariable + " = " + valorVariable + '\n')
         else:
             print('Error: Asignacicion incorrecta')
     else:
@@ -50,7 +53,7 @@ def definirLeer(codigo):
     variable = codigo[0]
     if variable in diccionarioVariables:
         diccionarioEscritura[variable] = diccionarioEscritura.pop('temp')
-        archivoSalida.writelines(variable + ' = raw_input(' + diccionarioEscritura[variable] + ')\n' )
+        escribirArchivo(variable + ' = raw_input(' + diccionarioEscritura[variable] + ')\n' )
     else:
         print("Error: No se encontro la variable")
 
@@ -58,13 +61,35 @@ def definirEscribir(codigo):
     diccionarioEscritura['temp'] = codigo[0]
 
 def definirEscribirLinea(codigo):    
-    print(codigo)
+    if codigo[2] == '':
+        escribirArchivo('print('+codigo[0]+')')
+    else:
+        if codigo[2] in diccionarioVariables:
+            escribirArchivo('print('+codigo[0]+' + '+codigo[2]+')\n')
+        else:
+            print("Error: No se encontro la variable")
+
+def inicioProceso(codigo):
+    global diccionarioFuncion
+    diccionarioFuncion = codigo
+    escribirArchivo('def '+codigo+'():\n')
+
+def finProceso():
+    escribirArchivo(diccionarioFuncion+"()")
 
 def main():
 
     archivo = open(nombreArchivo+".X", "r")
 
     for linea in archivo.readlines():
+        if re.match(rg.regexInicio, linea):
+            codigo = re.findall(rg.regexInicio, linea)                        
+            inicioProceso(codigo[0])
+
+        if re.match(rg.regexFin, linea):
+            finProceso()                    
+            
+
         if re.match(rg.regexDefinir, linea):
             codigo = re.findall(rg.regexDefinir, linea)                        
             definirVariable(codigo)
@@ -89,6 +114,6 @@ def main():
 
         elif re.match(rg.regexEscribirLinea, linea):
             codigo = re.findall(rg.regexEscribirLinea, linea)
-            definirEscribirLinea(codigo)
+            definirEscribirLinea(codigo[0])
 main()
 
