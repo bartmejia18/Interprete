@@ -1,6 +1,8 @@
 def principal():
-num1 = 10
-num2 = raw_input("Ingrese un numero: ")
-num2 = num1 + num2;
-print("El resultado es: " + num2)
+	numero = raw_input("Ingrese numero: ")
+	contador = 0
+	contador = square numero;
+	while (contador !=numero):
+		contador = contador+1;
+		print("contador:" + contador)
 principal()
