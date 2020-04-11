@@ -1,8 +1,6 @@
 import re
 import regex.regex as rg
-
-nombreArchivo = "prueba1"
-archivoSalida = open(nombreArchivo+".py", "w")
+import os
 
 diccionarioVariables = {}
 diccionarioEscritura = {}
@@ -67,7 +65,7 @@ def definirLeer(codigo):
     variable = codigo[0]
     if variable in diccionarioVariables:
         diccionarioEscritura[variable] = diccionarioEscritura.pop('temp')
-        escribirArchivo(0,variable + ' = raw_input(' + diccionarioEscritura[variable] + ')\n' )
+        escribirArchivo(0,variable + ' = input(' + diccionarioEscritura[variable] + ')\n' )
     else:
         print("Error: No se encontro la variable")
 
@@ -144,11 +142,22 @@ def definirMientras(codigo):
 def definirFinMientras():
     eliminarTabs()
 
-def main():
+def intepretarArchivo(nombre):
+    print("Interpretando ....")
+    print("\b")
+    file = open(nombre, "r")
+    os.system('python ' + file.name)
 
-    archivo = open(nombreArchivo+".X", "r")
+def compilador(nombreArchivo, ejecutar):
+    
+    print("Traduciendo ....")
 
-    for linea in archivo.readlines():
+    nombreArchivo = nombreArchivo.split(".")
+    global archivoSalida 
+    archivoSalida = open(nombreArchivo[0]+".py", "w")
+    archivoEntrada = open(nombreArchivo[0]+".X", "r")
+
+    for linea in archivoEntrada.readlines():
         if re.search(rg.regexInicio, linea):
             codigo = re.findall(rg.regexInicio, linea)                        
             inicioProceso(codigo[0])
@@ -156,7 +165,6 @@ def main():
         if re.search(rg.regexFin, linea):
             finProceso()                    
             
-
         if re.search(rg.regexDefinir, linea):
             codigo = re.findall(rg.regexDefinir, linea)                        
             definirVariable(codigo)
@@ -194,5 +202,28 @@ def main():
         elif re.search(rg.regexFinMientras, linea):
             codigo = re.findall(rg.regexFinMientras, linea)
             definirFinMientras()
+
+    archivoSalida.close()
+    archivoEntrada.close()
+    print("Archivo generado: " + archivoSalida.name)
+    if ejecutar == True:
+        intepretarArchivo(archivoSalida.name)
+
+
+def main():
+    ejecutar = True
+    while ejecutar:
+        comando = input("#>> ")
+        instruccion = comando.split()
+        if 'compile' in comando: 
+            compilador(instruccion[1], False)
+        elif 'run' in comando:
+            compilador(instruccion[1], True)
+        elif 'load' in comando:
+            intepretarArchivo(instruccion[1])
+        elif comando == "exit":
+            print('Saliendo ....')
+            ejecutar = False
+            
 main()
 
