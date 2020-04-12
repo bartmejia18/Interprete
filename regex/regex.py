@@ -29,7 +29,8 @@ regexLeer = 'LEER ([a-zA-Z0-9_.]+);'
 regexEscribir = 'ESCRIBIR (".*");'
 
 #Sentencia ESCRIBIR_LINEA
-regexEscribirLinea = re.compile(r'ESCRIBIR_LINEA\s(".*")(\s?\+\s?([a-zA-Z][a-zA-Z0-9_.]*))?;')
+regexEscribirLinea = 'ESCRIBIR_LINEA ([a-z][a-z0-9A-Z]*|".*")(\s?\+\s?("?.*"?))?;'
+regexConvertirTexto = 'CONVERTIRATEXTO'
 
 #Sentencia condiciones
 regexSi = 'SI \(([a-zA-Z][a-zA-Z0-9]*|[0-9]+|".*")\s?(<|>|==|<=|>=|!=)\s?([a-zA-Z][a-zA-Z0-9]*|[0-9]+|".*")\)(\s?(Y|O)\s?\(([a-zA-Z][a-zA-Z0-9]*|[0-9]+|".*")\s?(<|>|==|<=|>=|!=)\s?([a-zA-Z][a-zA-Z0-9]*|[0-9]+|".*")\))?'

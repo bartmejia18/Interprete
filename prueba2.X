@@ -1,8 +1,9 @@
 PROCESO main
-    DEFINIR numero COMO ENTERO;
+    DEFINIR numero COMO TEXTO;
     DEFINIR contador COMO ENTERO;
-    ESCRIBIR "Ingrese numero: ";
-    LEER numero;
-    contador<-numero * 2;
-    ESCRIBIR_LINEA "La multiplicacion es" + contador;
+    numero<-"hola";
+    ESCRIBIR_LINEA numero;
+    ESCRIBIR_LINEA "Prueba: " + CONVERTIRATEXTO(numero);
+    ESCRIBIR_LINEA "HOLA";
+    ESCRIBIR_LINEA "HOLA" + numero;
 FINPROCESO
